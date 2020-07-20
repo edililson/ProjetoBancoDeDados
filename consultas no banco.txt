@@ -1,0 +1,10 @@
+use projeto_supermercado;
+
+select * from registro_venda rv;  
+
+select * from funcionario f where idade_Func > 20 order by idade_Func;
+
+select f2.codigo_Func, f2.nome_Func , reg.id_registro FROM registro_venda reg
+INNER JOIN funcionario f2 
+ON f2.id_Func = reg.fk_func 
+ order by f2.codigo_Func ; 

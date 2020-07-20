@@ -1,0 +1,90 @@
+create database projeto_supermercado;
+
+use projeto_supermercado;
+
+
+create table cliente(
+	id_CLiente int primary key not null auto_increment,
+	nome varchar(255) not null,
+	cpf varchar(255) not null,
+	telefone varchar(255) not null
+);
+
+create table fornecedor(
+	id_Fornecedor int primary key not null auto_increment,
+	cnpj varchar(25) not null,
+	razao_social varchar(255) not null,
+	telefone varchar(255) not null
+);
+
+create table funcionario(
+	id_Func int primary key not null auto_increment,
+	codigo_Func int not null,
+	nome_Func varchar(255) not null,
+	idade_Func int not null,
+	horas_Trabalhadas_Mensais varchar(11)	not null
+);
+
+create table funcionarioExtra(
+	id_Func_Ex int primary key not null auto_increment,
+	cod_Func_Ex int not null,
+	nome_Func_Ex varchar(255) not null,
+	empresa_Ex varchar(255) not null
+);
+
+create table produto(
+	id_Produto int primary key not null auto_increment,
+	nome_produto varchar(255) not null,
+	descricao varchar(255),
+	vencimento_produto date,
+	estoque_min int not null,
+	estoque_max int not null,
+	preco_produto decimal(9,2),
+	fk_fornecedor int,
+	FOREIGN KEY (fk_fornecedor) REFERENCES Fornecedor (id_fornecedor)
+);
+
+create table estoque(
+	id_estoque int primary key not null auto_increment,
+	qtd_produto int,
+	FOREIGN KEY (qtd_produto) REFERENCES Produto (id_produto)
+);
+
+create table registro_venda(
+	id_registro int primary key not null auto_increment,
+	valot_total decimal(9,2) not null,
+	data_saida date not null,
+	fk_cliente int not null,
+	fk_func int not null,
+	FOREIGN KEY (fk_cliente) REFERENCES Cliente (id_cliente),
+	FOREIGN KEY (fk_func) REFERENCES Funcionario (id_func)
+);
+
+create table registro_entrada(
+	id_registro int primary key not null auto_increment,
+	qtd_produtos int not null,
+	valor_comprado_por_unidade decimal(9,2) not null,
+	valor_total_de_entrada decimal(9,2),
+	fk_produto int not null,
+	foreign key (fk_produto) references Produto (id_produto)
+);
+
+create table produto_vendido(
+	id int primary key not null auto_increment,
+	qtd_vendido int not null,
+	fk_produto int not null,
+	fk_reg_venda int not null,
+	foreign key (fk_produto) references produto (id_produto),
+	foreign key (fk_reg_venda) references registro_venda (id_registro)
+);
+
+create table delivery(
+	id int primary key not null auto_increment,
+	id_pedido int not null,
+	qtd_produto int,
+	endereco varchar(255),
+	fk_venda int not null,
+	fk_produto int not null,
+	foreign key (fk_venda) references registro_venda (id_registro),
+	foreign key (fk_produto) references produto (id_produto)
+);
